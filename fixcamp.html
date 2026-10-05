@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>FixCamp – Campus Maintenance Reporting</title>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef2ef;--card:#fff;--tx:#13262d;--mu:#5d717a;--bd:#dce5e1;--pr:#0f5f68;--prt:#fff;--ac:#f26b1d;--act:#13262d;--hd:#0e2a31;--ok:#15803d;--wa:#d97706;--er:#dc2626;--in:#1d6fd8;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a171b;--card:#12262d;--tx:#e6eff0;--mu:#93a9b0;--bd:#23404a;--pr:#5fd3c6;--prt:#0a171b;--hd:#071115}}
+:root[data-theme="dark"]{--bg:#0a171b;--card:#12262d;--tx:#e6eff0;--mu:#93a9b0;--bd:#23404a;--pr:#5fd3c6;--prt:#0a171b;--hd:#071115}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"DM Sans",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.5}
+h2,h3,.logo,.stat b,.hero h1{font-family:"Bricolage Grotesque","DM Sans",system-ui,sans-serif;letter-spacing:-.01em}
+.wrap{max-width:1050px;margin:0 auto;padding:20px 16px}
+header{background:var(--hd);position:sticky;top:env(safe-area-inset-top,0px);z-index:5;border-bottom:5px solid transparent;border-image:repeating-linear-gradient(-45deg,#f26b1d 0 12px,#13262d 12px 24px) 5}
+header .wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px}
+header .logo{color:#fff}header .meta{color:#a9c1c7}
+.logo{font-weight:800;font-size:22px}.sp{flex:1}
+nav{display:flex;gap:4px;margin-left:8px}
+button,.btn{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 16px;border-radius:10px;transition:background .15s,transform .1s}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--ac);outline-offset:1px}
+header button{background:transparent;color:#d6e4e7;border-color:transparent}
+header button:hover{background:#ffffff1a}
+header nav button.on{background:var(--ac);color:#13262d;font-weight:700}
+header>.wrap>button:last-child{border-color:#ffffff40}
+button.p{background:var(--ac);color:#13262d;border-color:var(--ac);font-weight:700}
+button.p:hover{filter:brightness(1.07)}
+button.on{background:var(--act);color:#fff;border-color:var(--act)}
+:root[data-theme="dark"] button.on,:root:not([data-theme="light"]) button.on{--act:#1e4450}
+button.g{background:var(--ok);color:#fff;border-color:var(--ok);font-weight:700}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 1px 2px #0e2a3112}
+h2{margin:6px 0 14px;font-size:26px;font-weight:800}h3{margin:0 0 8px;font-size:17px;font-weight:700}
+label{display:block;font-size:13px;font-weight:500;color:var(--mu);margin:12px 0 5px}
+input,select,textarea{font:inherit;width:100%;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx)}
+textarea{min-height:90px;resize:vertical}
+.grid{display:grid;gap:12px}.g4{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.stat{text-align:left;position:relative;padding:16px 18px 14px;overflow:hidden;margin-bottom:0}
+.stat:before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c,var(--pr))}
+.stat i{position:absolute;right:14px;top:12px;font-style:normal;font-size:24px;opacity:.9}
+.stat b{font-size:38px;display:block;line-height:1.1;font-weight:800}.stat span{color:var(--mu);font-size:13px;font-weight:500}
+.g4{margin-bottom:14px}
+.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;color:#fff;vertical-align:middle}
+.Pending{background:var(--wa)}.InProgress{background:var(--in)}.Resolved{background:var(--ok)}
+.High{background:var(--er)}.Medium{background:#c2410c}.Low{background:#64748b}
+.filters{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+@media(max-width:700px){.filters{grid-template-columns:1fr 1fr}.filters input{grid-column:1/-1}}
+.item{display:flex;gap:14px;align-items:center;cursor:pointer;border-left:6px solid var(--bd);transition:box-shadow .15s,transform .15s}
+.item:hover{box-shadow:0 6px 18px #0e2a3126;transform:translateY(-1px)}
+.st-Pending{border-left-color:var(--wa)}.st-InProgress{border-left-color:var(--in)}.st-Resolved{border-left-color:var(--ok)}
+.item img{width:68px;height:68px;object-fit:cover;border-radius:10px}
+.ic{width:56px;height:56px;border-radius:12px;background:var(--bg);display:grid;place-items:center;font-size:28px;flex:none}
+.meta{color:var(--mu);font-size:13px}
+.split{display:grid;grid-template-columns:1.1fr 1fr;min-height:100vh;min-height:100dvh}
+.hero{background:var(--hd);color:#fff;padding:48px 44px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.hero:before{content:"";position:absolute;left:0;right:0;top:0;height:14px;background:repeating-linear-gradient(-45deg,#f26b1d 0 14px,#13262d 14px 28px)}
+.hero .logo{font-size:30px;margin-bottom:28px}
+.hero h1{font-size:clamp(34px,5vw,54px);line-height:1.05;margin:0 0 16px;font-weight:800}
+.hero p{color:#b7ced3;font-size:17px;max-width:30em;margin:0 0 26px}
+.hero ul{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+.hero li{display:flex;gap:12px;align-items:center;background:#ffffff12;border-radius:12px;padding:12px 14px}
+.hero li span{font-size:22px}
+.formside{display:grid;place-items:center;padding:24px}
+.auth{width:100%;max-width:420px;margin:0;padding:26px}
+@media(max-width:820px){.split{grid-template-columns:1fr}.hero{padding:36px 22px 28px}.hero ul{display:none}}
+.pw{position:relative}.pw button{position:absolute;right:5px;top:4px;padding:5px 10px;font-size:12px;border-radius:8px}
+.tabs{display:flex;gap:6px;margin:14px 0 4px;background:var(--bg);padding:4px;border-radius:12px}.tabs button{flex:1;border-color:transparent;background:transparent}
+.tabs button.on{background:var(--card);color:var(--tx);border-color:var(--bd);font-weight:700;box-shadow:0 1px 3px #0e2a3126}
+.bar{height:12px;background:var(--bd);border-radius:6px;overflow:hidden;margin:3px 0 10px}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pr),var(--ac));border-radius:6px}
+.tl{border-left:2px solid var(--bd);margin:8px 0 0 6px;padding-left:16px}
+.tl div{position:relative;margin-bottom:12px}.tl div:before{content:"";position:absolute;left:-23px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--ac);border:2px solid var(--card)}
+.modal{position:fixed;inset:0;background:#06141899;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:20px;z-index:20;backdrop-filter:blur(3px)}
+.modal .card{max-width:640px;width:100%;margin:auto;padding:22px}
+.dimg{max-width:100%;border-radius:12px;margin:8px 0}
+.err{color:var(--er);font-size:13px;margin-top:8px;font-weight:500}
+.hint{font-size:12px;color:var(--mu);margin-top:12px;background:var(--bg);padding:8px 10px;border-radius:8px}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+.chars{display:flex;gap:4px;align-items:flex-end;margin-top:22px}.char{width:125px;height:auto;display:block}
+.hm{transform-origin:84px 94px;animation:hit 1.3s ease-in-out infinite}.girl .hm{animation-delay:.65s}
+@keyframes hit{0%,100%{transform:rotate(0)}45%{transform:rotate(-26deg)}62%{transform:rotate(7deg)}}
+.banner{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(120deg,var(--hd),#14525b);color:#fff;border:0;padding-bottom:6px;overflow:hidden}
+.banner>div:first-child{flex:1;min-width:250px;padding-bottom:12px}.banner h2{color:#fff}.banner .meta{color:#b7ced3;margin:4px 0 12px}
+.banner .row button{flex:none;background:#ffffff1f;color:#fff;border-color:#ffffff33}.banner .row button:hover{background:#ffffff38}.banner .chars{margin:0}
+.prof{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.av{width:72px;height:72px;border-radius:50%;background:var(--ac);color:#13262d;display:grid;place-items:center;font:800 32px "Bricolage Grotesque",sans-serif}
+.info{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}.info span{display:block;font-size:12px;color:var(--mu)}.info b{font-weight:600}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:0 12px}.auth.wide{max-width:540px}
+nav{flex-wrap:wrap}@media(max-width:820px){.hero .chars{margin-top:8px}.char{width:96px}}
+@media(prefers-reduced-motion:reduce){.hm{animation:none}}
+</style>
+</head><body>
+<div id="app"></div>
+<script>
+const CATS=["Furniture","Electrical","Water Leakage","Classroom","Plumbing","Cleanliness","Other"];
+const PRIS=["Low","Medium","High"],STS=["Pending","In Progress","Resolved"];
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cls=s=>s.replace(" ","");
+const fmt=t=>new Date(t).toLocaleString([], {dateStyle:"medium",timeStyle:"short"});
+function ld(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function sv(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){alert("Storage full – try a smaller photo.")}}
+let users=ld("fx_users",null),cs=ld("fx_cs",null),me=ld("fx_me",null),view="dash",authTab="login",cur=null,F={q:"",st:"",cat:"",pri:""},err="";
+if(!users){users=[{name:"Demo Student",email:"student@campus.edu",pw:"student123",role:"student"},{name:"Ravi (Maintenance)",email:"staff@campus.edu",pw:"staff123",role:"staff"}];sv("fx_users",users)}
+const DP={"student@campus.edu":{roll:"21CS042",degree:"B.E.",dept:"Computer Science & Engineering",year:"3rd Year",section:"A",phone:"98765 43210",res:"Hostel",room:"Block B – 214"},"staff@campus.edu":{staffId:"MNT-007",skill:"Electrician",phone:"98400 11223",shift:"Day (8am–4pm)"}};
+users.forEach(u=>{if(!u.profile&&DP[u.email])u.profile=DP[u.email]});sv("fx_users",users);if(me&&!me.profile&&DP[me.email]){me.profile=DP[me.email];sv("fx_me",me)}
+if(!cs){const d=864e5,n=Date.now();const mk=(i,c,l,ds,p,s,ago)=>({id:i,by:"student@campus.edu",byName:"Demo Student",cat:c,loc:l,desc:ds,pri:p,status:s,photo:"",created:n-ago*d,
+ timeline:[{t:n-ago*d,txt:"Complaint submitted",who:"Demo Student"}].concat(s!="Pending"?[{t:n-(ago-1)*d,txt:"Status changed to "+s,who:"Ravi (Maintenance)"}]:[])});
+ cs=[mk(1,"Water Leakage","Block A, 2nd floor washroom","Tap pipe leaking continuously, floor is slippery.","High","In Progress",2),
+ mk(2,"Furniture","Room 204, CSE Block","Three benches have broken legs.","Medium","Pending",1),
+ mk(3,"Electrical","Library reading hall","Two ceiling fans not working.","Medium","Resolved",5),
+ mk(4,"Classroom","Room 110","Projector screen is torn.","Low","Pending",0)];sv("fx_cs",cs)}
+const save=()=>sv("fx_cs",cs);
+const staff=()=>me&&me.role==="staff";
+const mine=()=>staff()?cs:cs.filter(c=>c.by===me.email);
+
+function pwField(id,ph){return `<div class="pw"><input id="${id}" type="text" placeholder="${ph}" autocomplete="off"><button type="button" onclick="tp('${id}',this)">Hide</button></div>`}
+function tp(id,b){const i=$("#"+id);const h=i.type==="password";i.type=h?"text":"password";b.textContent=h?"Hide":"Show"}
+function authView(){
+ const reg=authTab==="register";
+ return `<div class="split"><div class="hero"><div class="logo">🛠 FixCamp</div><h1>Spot it. Report it. Get it fixed.</h1><p>The campus maintenance board where every broken bench, leaking tap and dead light has an owner and a status.</p><ul><li><span>📸</span>Students report with a photo, location and priority</li><li><span>🔧</span>Maintenance staff update status and add notes</li><li><span>📊</span>Everyone sees progress and resolution stats</li></ul>${chars()}</div><div class="formside"><div class="auth card ${reg?"wide":""}"><h2 style="margin:0">Welcome to FixCamp</h2><p class="meta" style="margin:2px 0 0">Campus Maintenance Reporting System</p>
+ <div class="tabs"><button class="${!reg?"on":""}" onclick="authTab='login';err='';R()">Login</button><button class="${reg?"on":""}" onclick="authTab='register';err='';R()">Register</button></div>
+ ${reg?`<label>Full name</label><input id="nm"><label>I am a</label><select id="rl" onchange="regRole(this.value)"><option value="student" ${rr==="student"?"selected":""}>Student</option><option value="staff" ${rr==="staff"?"selected":""}>Maintenance Staff</option></select><div class="fg">${fieldsFor(rr).map(f=>`<div><label>${f[0]}</label>${f[2]}</div>`).join("")}</div>`:""}
+ <label>Email</label><input id="em" type="email" placeholder="you@campus.edu"><label>Password</label>${pwField("pw","Password (visible)")}
+ <div class="err">${esc(err)}</div><button class="p" style="width:100%;margin-top:12px" onclick="${reg?"doReg()":"doLogin()"}">${reg?"Create account":"Login"}</button>
+ <div class="hint">Demo – Student: student@campus.edu / student123 · Staff: staff@campus.edu / staff123</div></div></div></div>`}
+function doLogin(){const e=$("#em").value.trim().toLowerCase(),p=$("#pw").value;const u=users.find(x=>x.email===e&&x.pw===p);
+ if(!u){err="Invalid email or password.";return R()}me=u;sv("fx_me",me);view="dash";err="";R()}
+function doReg(){const n=$("#nm").value.trim(),e=$("#em").value.trim().toLowerCase(),p=$("#pw").value,r=$("#rl").value;
+ if(!n||!e||p.length<4){err="Fill all fields (password min 4 chars).";return R()}
+ if(users.some(x=>x.email===e)){err="Email already registered.";return R()}
+ const pr={};fieldsFor(r).forEach(f=>pr[f[1]]=$("#p_"+f[1]).value.trim());if(!Object.values(pr)[0]){err="Please enter your "+fieldsFor(r)[0][0]+".";return R()}
+ const u={name:n,email:e,pw:p,role:r,profile:pr};users.push(u);sv("fx_users",users);me=u;sv("fx_me",me);view="dash";err="";R()}
+function logout(){me=null;F={q:"",st:"",cat:"",pri:""};view="dash";sv("fx_me",null);R()}
+
+function stats(list){const t=list.length,c=s=>list.filter(x=>x.status===s).length;
+ return `<div class="grid g4"><div class="card stat" style="--c:var(--pr)"><i>📋</i><b>${t}</b><span>Total complaints</span></div><div class="card stat" style="--c:var(--wa)"><i>⏳</i><b style="color:var(--wa)">${c("Pending")}</b><span>Pending</span></div><div class="card stat" style="--c:var(--in)"><i>🔧</i><b style="color:var(--in)">${c("In Progress")}</b><span>In progress</span></div><div class="card stat" style="--c:var(--ok)"><i>✅</i><b style="color:var(--ok)">${c("Resolved")}</b><span>Resolved</span></div></div>`}
+function bars(title,keys,fn,list){const t=list.length||1;
+ return `<div class="card"><h3>${title}</h3>${keys.map(k=>{const n=list.filter(x=>fn(x)===k).length;return `<div class="meta">${k} – ${n}</div><div class="bar"><i style="width:${n/t*100}%"></i></div>`}).join("")}</div>`}
+function statsView(){const l=cs,r=l.filter(x=>x.status==="Resolved");
+ const avg=r.length?r.reduce((a,x)=>a+((x.resolvedAt||Date.now())-x.created),0)/r.length/36e5:0;
+ return `<h2>Statistics</h2>${stats(l)}<div class="grid g4"><div class="card stat"><i>🎯</i><b>${l.length?Math.round(r.length/l.length*100):0}%</b><span>Resolution rate</span></div>
+ <div class="card stat"><b>${avg?avg.toFixed(1)+"h":"–"}</b><span>Avg. resolution time</span></div><div class="card stat"><b>${l.filter(x=>x.pri==="High"&&x.status!=="Resolved").length}</b><span>Open high priority</span></div></div>
+ <div class="grid g2">${bars("By category",CATS,x=>x.cat,l)}${bars("By priority",PRIS,x=>x.pri,l)}${bars("By status",STS,x=>x.status,l)}</div>`}
+
+function listView(){const all=mine();
+ const l=all.filter(c=>(!F.st||c.status===F.st)&&(!F.cat||c.cat===F.cat)&&(!F.pri||c.pri===F.pri)&&(!F.q||(c.desc+c.loc+c.cat+c.byName+"#"+c.id).toLowerCase().includes(F.q.toLowerCase())));
+ const o=a=>a.map(x=>`<option ${x===F.__v?"selected":""}>${x}</option>`).join("");
+ const sel=(k,ph,a)=>`<select onchange="F.${k}=this.value;R(1)"><option value="">${ph}</option>${a.map(x=>`<option ${F[k]===x?"selected":""}>${x}</option>`).join("")}</select>`;
+ const pr={High:0,Medium:1,Low:2};l.sort((a,b)=>(a.status==="Resolved")-(b.status==="Resolved")||pr[a.pri]-pr[b.pri]||b.created-a.created);
+ return `<div class="filters"><input id="q" placeholder="Search description, location, ID…" value="${esc(F.q)}" oninput="F.q=this.value;R(1,1)">${sel("st","All status",STS)}${sel("cat","All categories",CATS)}${sel("pri","All priority",PRIS)}</div>
+ ${l.length?l.map(c=>`<div class="card item st-${cls(c.status)}" onclick="cur=${c.id};R()">${c.photo?`<img src="${c.photo}" alt="">`:`<div class="ic">🔧</div>`}
+ <div style="flex:1"><b>#${c.id} · ${esc(c.cat)}</b> <span class="badge ${c.pri}">${c.pri}</span> <span class="badge ${cls(c.status)}">${c.status}</span>
+ <div>${esc(c.desc.slice(0,110))}${c.desc.length>110?"…":""}</div><div class="meta">📍 ${esc(c.loc)} · ${staff()?esc(c.byName)+" · ":""}${fmt(c.created)}</div></div></div>`).join(""):`<div class="card meta">No complaints match.</div>`}`}
+
+function reportView(){return `<h2>Report an issue</h2><div class="card"><label>Category</label><select id="rc">${CATS.map(c=>`<option>${c}</option>`).join("")}</select>
+ <label>Location</label><input id="rl2" placeholder="e.g. Block B, Room 305"><label>Description</label><textarea id="rd" placeholder="Describe the problem…"></textarea>
+ <div class="row"><div><label>Priority</label><select id="rp"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+ <div><label>Photo (optional)</label><input id="rf" type="file" accept="image/*"></div></div><div class="err">${esc(err)}</div>
+ <button class="p" style="margin-top:12px" onclick="submitC()">Submit complaint</button></div>`}
+function submitC(){const loc=$("#rl2").value.trim(),d=$("#rd").value.trim(),f=$("#rf").files[0];
+ if(!loc||!d){err="Location and description are required.";return R()}
+ const fin=photo=>{const n=Date.now();cs.push({id:Math.max(0,...cs.map(c=>c.id))+1,by:me.email,byName:me.name,cat:$("#rc").value,loc,desc:d,pri:$("#rp").value,status:"Pending",photo,created:n,timeline:[{t:n,txt:"Complaint submitted",who:me.name}]});
+  save();err="";view="list";R()};
+ if(!f)return fin("");
+ const img=new Image();img.onload=()=>{const s=Math.min(1,640/img.width),c=document.createElement("canvas");c.width=img.width*s;c.height=img.height*s;c.getContext("2d").drawImage(img,0,0,c.width,c.height);fin(c.toDataURL("image/jpeg",.7))};
+ img.onerror=()=>{err="Could not read image.";R()};img.src=URL.createObjectURL(f)}
+
+function modal(){const c=cs.find(x=>x.id===cur);if(!c)return"";
+ return `<div class="modal" onclick="if(event.target===this){cur=null;R()}"><div class="card"><div class="row" style="align-items:center"><h2 style="flex:3;margin:0">#${c.id} · ${esc(c.cat)}</h2><button style="flex:0" onclick="cur=null;R()">✕</button></div>
+ <p><span class="badge ${c.pri}">${c.pri}</span> <span class="badge ${cls(c.status)}">${c.status}</span></p><p>${esc(c.desc)}</p>
+ <div class="meta">📍 ${esc(c.loc)}<br>Reported by ${esc(c.byName)} (${esc(c.by)}) on ${fmt(c.created)}${(()=>{const u=users.find(x=>x.email===c.by),q=u&&u.profile;return q&&q.dept?`<br>🎓 ${esc(q.degree||"")} ${esc(q.dept)} · ${esc(q.year||"")}${q.section?" – "+esc(q.section):""} · Roll ${esc(q.roll||"-")}${q.phone?" · 📞 "+esc(q.phone):""}${q.room?" · 🏠 "+esc(q.room):""}`:""})()}</div>${c.photo?`<img class="dimg" src="${c.photo}" alt="Issue photo">`:""}
+ ${staff()?`<hr style="border:0;border-top:1px solid var(--bd);margin:14px 0"><div class="row"><div><label>Priority</label><select id="mp">${PRIS.map(p=>`<option ${p===c.pri?"selected":""}>${p}</option>`).join("")}</select></div>
+ <div><label>Status</label><select id="ms">${STS.map(p=>`<option ${p===c.status?"selected":""}>${p}</option>`).join("")}</select></div></div>
+ <label>Add update / comment</label><textarea id="mc" placeholder="e.g. Plumber assigned, parts ordered…"></textarea>
+ <div class="row" style="margin-top:10px"><button class="p" onclick="upd(${c.id})">Save update</button>${c.status!=="Resolved"?`<button class="g" onclick="resolve(${c.id})">✔ Mark resolved</button>`:""}</div>`:""}
+ <h3 style="margin-top:16px">Timeline</h3><div class="tl">${c.timeline.map(t=>`<div><b>${esc(t.txt)}</b><div class="meta">${esc(t.who)} · ${fmt(t.t)}</div></div>`).join("")}</div></div></div>`}
+function upd(id,forceRes){const c=cs.find(x=>x.id===id),p=$("#mp").value,s=forceRes?"Resolved":$("#ms").value,m=$("#mc").value.trim(),n=Date.now(),L=c.timeline;
+ if(p!==c.pri){L.push({t:n,txt:`Priority changed ${c.pri} → ${p}`,who:me.name});c.pri=p}
+ if(s!==c.status){L.push({t:n,txt:"Status changed to "+s,who:me.name});c.status=s;if(s==="Resolved")c.resolvedAt=n}
+ if(m)L.push({t:n,txt:"Comment: "+m,who:me.name});save();R()}
+function resolve(id){upd(id,true)}
+
+function R(keep,focus){
+ if(!me){$("#app").innerHTML=authView();return}
+ const nc=x=>cs.filter(c=>c.status===x).length;const tabs=staff()?[["dash","Dashboard"],["list","All ("+cs.length+")",""],["list","Pending ("+nc("Pending")+")","Pending"],["list","In Progress ("+nc("In Progress")+")","In Progress"],["list","Resolved ("+nc("Resolved")+")","Resolved"],["stats","Analyze"],["profile","Profile"]]:[["dash","Dashboard"],["report","Report"],["list","My complaints"],["profile","Profile"]];
+ let body=view==="dash"?(staff()?banner():"")+`<h2>${staff()?"All complaints overview":"Your overview"}</h2>${stats(mine())}<h3 style="margin-top:6px">Recent</h3>`+(()=>{const s=F;F={q:"",st:"",cat:"",pri:""};const h=listView().replace(/<div class="filters">[\s\S]*?<\/div>(?=\s*<div class="card item|\s*<div class="card meta")/,"");F=s;return h})()
+  :view==="list"?`<h2>${staff()?(F.st?F.st+" complaints":"All complaints"):"My complaints"}</h2>`+listView():view==="report"?reportView():view==="profile"?profileView():statsView();
+ $("#app").innerHTML=`<header><div class="wrap"><span class="logo">🛠 FixCamp</span><nav>${tabs.map(t=>`<button class="${view===t[0]&&(t[0]!=="list"||!staff()||F.st===(t[2]||""))?"on":""}" onclick="go('${t[0]}','${t[2]||""}')">${t[1]}</button>`).join("")}</nav><span class="sp"></span>
+ <span class="meta">${esc(me.name)} · ${staff()?"Maintenance Staff":"Student"}</span><button onclick="logout()">Logout</button></div></header><div class="wrap">${body}</div>${modal()}`;
+ if(focus){const q=$("#q");if(q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}}
+const DEPTS=["Computer Science & Engineering","Information Technology","Electronics & Communication","Electrical & Electronics","Mechanical Engineering","Civil Engineering","AI & Data Science","Business Administration","Arts & Science","Other"];
+const SK=["Electrician","Plumber","Carpenter","Civil / Masonry","General maintenance"];
+const s2=(id,a,v)=>`<select id="${id}">${a.map(x=>`<option ${x===v?"selected":""}>${x}</option>`).join("")}</select>`;
+const i2=(id,v,ph)=>`<input id="${id}" value="${esc(v||"")}" placeholder="${ph||""}">`;
+function fieldsFor(role,p){p=p||{};return role==="staff"?[["Staff ID","staffId",i2("p_staffId",p.staffId,"MNT-001")],["Specialization","skill",s2("p_skill",SK,p.skill)],["Phone","phone",i2("p_phone",p.phone,"98765 43210")],["Shift","shift",s2("p_shift",["Day (8am–4pm)","Evening (4pm–12am)","Night"],p.shift)]]:
+[["Roll / Register no.","roll",i2("p_roll",p.roll,"21CS042")],["Degree","degree",s2("p_degree",["B.E.","B.Tech","B.Sc","BBA","M.E.","M.Tech","MBA","Other"],p.degree)],["Department","dept",s2("p_dept",DEPTS,p.dept)],["Year","year",s2("p_year",["1st Year","2nd Year","3rd Year","4th Year"],p.year)],["Section / Class","section",i2("p_section",p.section,"A")],["Phone","phone",i2("p_phone",p.phone,"98765 43210")],["Residence","res",s2("p_res",["Hostel","Day scholar"],p.res)],["Hostel block / room","room",i2("p_room",p.room,"Block B – 214")]]}
+let pe=false,rr="student";
+function regRole(v){const k=["nm","em","pw"].map(i=>$("#"+i).value);rr=v;R();["nm","em","pw"].forEach((i,j)=>$("#"+i).value=k[j])}
+function go(v,st){view=v;F={q:"",st:st||"",cat:"",pri:""};pe=false;err="";R()}
+function mech(g){const sk=g?"#f8cfae":"#eab78d",hr=g?"#6b3f2a":"#2d2a32",tee=g?"#ff8fab":"#f26b1d";
+return `<svg class="char ${g?"girl":"boy"}" viewBox="0 0 135 160" role="img" aria-label="${g?"Girl":"Boy"} mechanic mascot"><ellipse cx="62" cy="155" rx="34" ry="4" fill="#0000002e"/>
+<rect x="44" y="108" width="15" height="40" rx="7" fill="#0f5f68"/><rect x="65" y="108" width="15" height="40" rx="7" fill="#0f5f68"/><rect x="39" y="142" width="22" height="11" rx="5.5" fill="#3b2a20"/><rect x="63" y="142" width="22" height="11" rx="5.5" fill="#3b2a20"/>
+<rect x="37" y="82" width="50" height="40" rx="15" fill="${tee}"/><path d="M46 88h32v32a8 8 0 0 1-8 8H54a8 8 0 0 1-8-8z" fill="#0f5f68"/><rect x="53" y="108" width="18" height="10" rx="3" fill="#0b4a52"/><circle cx="49" cy="92" r="2.6" fill="#fbbf24"/><circle cx="75" cy="92" r="2.6" fill="#fbbf24"/>
+<path d="M40 96L28 112" stroke="${sk}" stroke-width="10" stroke-linecap="round"/><g transform="translate(26 112) rotate(-20)"><rect x="-2.5" y="-30" width="5" height="34" rx="2" fill="#9aa5b1"/><circle cy="-33" r="7" fill="none" stroke="#9aa5b1" stroke-width="5"/></g><circle cx="27" cy="112" r="6" fill="${sk}"/>
+<circle cx="35" cy="60" r="5" fill="${sk}"/><circle cx="89" cy="60" r="5" fill="${sk}"/>
+${g?`<circle cx="31" cy="70" r="9" fill="${hr}"/><circle cx="93" cy="70" r="9" fill="${hr}"/><circle cx="34" cy="62" r="3" fill="#ff5d8f"/><circle cx="90" cy="62" r="3" fill="#ff5d8f"/>`:`<path d="M36 55q-2 9 2 13M88 55q2 9-2 13" stroke="${hr}" stroke-width="5" stroke-linecap="round" fill="none"/>`}
+<circle cx="62" cy="56" r="27" fill="${sk}"/>${g?`<path d="M36 54q9 10 20 3q6 5 12 0q10 7 20-3v-4H36z" fill="${hr}"/>`:""}
+<path d="M35 50a27 24 0 0 1 54 0z" fill="#f26b1d"/><rect x="31" y="48" width="62" height="7" rx="3.5" fill="#d95a10"/><rect x="58" y="26" width="8" height="22" rx="3" fill="#fff" opacity=".85"/>
+<circle cx="52" cy="63" r="3.6" fill="#1b1b1b"/><circle cx="72" cy="63" r="3.6" fill="#1b1b1b"/><circle cx="53.2" cy="61.8" r="1.2" fill="#fff"/><circle cx="73.2" cy="61.8" r="1.2" fill="#fff"/>${g?`<path d="M47 58l-3-2M77 58l3-2" stroke="#1b1b1b" stroke-width="2" stroke-linecap="round"/>`:""}
+<circle cx="45" cy="71" r="4.5" fill="#ff8f9c" opacity=".6"/><circle cx="79" cy="71" r="4.5" fill="#ff8f9c" opacity=".6"/><path d="M55 72q7 7 14 0" fill="none" stroke="#7a3b2e" stroke-width="2.4" stroke-linecap="round"/>
+<g class="hm"><path d="M84 94L104 84" stroke="${sk}" stroke-width="10" stroke-linecap="round"/><g transform="translate(104 84) rotate(25)"><rect x="-2.5" y="-34" width="5" height="40" rx="2" fill="#8a5a33"/><rect x="-11" y="-42" width="22" height="12" rx="3" fill="#6b7785"/><rect x="-11" y="-42" width="8" height="12" rx="3" fill="#8a97a6"/></g><circle cx="104" cy="84" r="6" fill="${sk}"/></g></svg>`}
+const chars=()=>`<div class="chars">${mech(0)}${mech(1)}</div>`;
+function banner(){const c=s=>cs.filter(x=>x.status===s).length;
+ return `<div class="card banner"><div><h2 style="margin:0">Hi ${esc(me.name.split(" ")[0])}! 👋</h2><p class="meta">${c("Pending")} waiting · ${c("In Progress")} in progress · ${c("Resolved")} fixed. Pick a list to start.</p>
+ <div class="row"><button onclick="go('list','Pending')">⏳ Pending (${c("Pending")})</button><button onclick="go('list','In Progress')">🔧 In progress (${c("In Progress")})</button><button onclick="go('list','Resolved')">✅ Resolved (${c("Resolved")})</button><button onclick="go('list')">📋 All (${cs.length})</button></div></div>${chars()}</div>`}
+function profileView(){const p=me.profile||{},fl=fieldsFor(me.role,p),mc=mine(),rs=mc.filter(c=>c.status==="Resolved").length;
+ return `<h2>My profile</h2><div class="card prof"><div class="av">${esc(me.name.trim()[0]||"?").toUpperCase()}</div><div style="flex:1"><h3 style="font-size:22px;margin:0">${esc(me.name)}</h3><div class="meta">${esc(me.email)}</div><span class="badge ${staff()?"Resolved":"InProgress"}" style="margin-top:6px">${staff()?"Maintenance Staff":"Student"}</span></div><button onclick="pe=!pe;R()">${pe?"Cancel":"✏️ Edit profile"}</button></div>
+ <div class="card">${pe?`<h3>Edit details</h3><label>Full name</label><input id="p_name" value="${esc(me.name)}"><div class="fg">${fl.map(f=>`<div><label>${f[0]}</label>${f[2]}</div>`).join("")}</div><button class="p" style="margin-top:14px" onclick="saveProf()">Save profile</button>`
+ :`<h3>Details</h3><div class="info">${fl.map(f=>`<div><span>${f[0]}</span><b>${esc(p[f[1]]||"—")}</b></div>`).join("")}</div>`}</div>
+ <div class="grid g4"><div class="card stat" style="--c:var(--pr)"><b>${mc.length}</b><span>${staff()?"Total on campus":"Complaints filed"}</span></div><div class="card stat" style="--c:var(--ok)"><b>${rs}</b><span>Resolved</span></div><div class="card stat" style="--c:var(--wa)"><b>${mc.length-rs}</b><span>Still open</span></div></div>`}
+function saveProf(){const nm=$("#p_name").value.trim();if(!nm)return;const p={};fieldsFor(me.role).forEach(f=>p[f[1]]=$("#p_"+f[1]).value.trim());
+ me.name=nm;me.profile=p;const u=users.find(x=>x.email===me.email);if(u){u.name=nm;u.profile=p}cs.forEach(c=>{if(c.by===me.email)c.byName=nm});sv("fx_users",users);sv("fx_me",me);save();pe=false;R()}
+R();
+</script>
